@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>StateWizard Demo</title>
+</head>
+<body>
+  <h1>Compteur : <span id="counter">0</span></h1>
+  <button id="increment">Incrémenter</button>
+
+  <script type="module">
+    import { createDefaultStore } from './src/interface/store.js';
+    import { persistWithLocalStorage } from './src/infrastructure/localStorageAdapter.js';
+
+    const store = createDefaultStore(0);
+
+    // Persistance
+    persistWithLocalStorage("counterApp", store);
+
+    // Abonnement
+    const counterEl = document.getElementById("counter"); 
+    store.subscribe((state) => {
+      counterEl.textContent = state;
+    });
+
+    // Action
+    document.getElementById("increment").onclick = () => {
+      store.dispatch(prev => prev + 1);
+    };
+  </script>
+</body>
+</html>
